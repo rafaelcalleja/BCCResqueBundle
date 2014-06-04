@@ -79,6 +79,8 @@ class Resque
         return null;
     }
 
+    //Fix bug https://bugs.php.net/bug.php?id=60198
+    // array_intersect "Array to string coversion"
     public function enqueueOnce(Job $job, $trackStatus = false)
     {
         $queue = new Queue($job->queue);
@@ -86,13 +88,35 @@ class Resque
 
         foreach ($jobs AS $j) {
             if ($j->job->payload['class'] == get_class($job)) {
-                if (count(array_intersect($j->args, $job->args)) == count($job->args)) {
+                if (count($this->array_intersect_recursive($j->args, $job->args)) == count($job->args)) {
                     return ($trackStatus) ? $j->job->payload['id'] : null;
                 }
             }
         }
 
         return $this->enqueue($job, $trackStatus);
+    }
+
+    private function array_intersect_recursive($array1, $array2) {
+        foreach($array1 as $key => $value)
+        {
+            if (!isset($array2[$key]))
+            {
+                unset($array1[$key]);
+            }
+            else
+            {
+                if (is_array($array1[$key]))
+                {
+                    $array1[$key] = $this->array_intersect_recursive($array1[$key], $array2[$key]);
+                }
+                elseif ($array2[$key] !== $value)
+                {
+                    unset($array1[$key]);
+                }
+            }
+        }
+        return $array1;
     }
 
     public function enqueueAt($at,Job $job)
