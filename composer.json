@@ -27,6 +27,7 @@
             "url": "git@github.com:rafaelcalleja/php-resque-scheduler"
         }
     ],
+    "minimum-stability": "dev",
     "autoload": {
         "psr-0": { "BCC\\ResqueBundle": "" }
     },
