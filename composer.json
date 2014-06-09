@@ -17,6 +17,16 @@
         "chrisboulton/php-resque": "dev-recurring",
         "chrisboulton/php-resque-scheduler": "dev-recurring"
     },
+    "repositories": [
+	{
+            "type": "vcs",
+            "url": "git@github.com:rafaelcalleja/php-resque"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:rafaelcalleja/php-resque-scheduler"
+        }
+    ],
     "autoload": {
         "psr-0": { "BCC\\ResqueBundle": "" }
     },
